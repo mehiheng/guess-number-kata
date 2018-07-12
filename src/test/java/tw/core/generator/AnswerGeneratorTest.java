@@ -8,6 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -37,4 +38,29 @@ public class AnswerGeneratorTest {
         assertThat(answer, notNullValue());
         assertThat(answer.getIndexOfNum("4"), is(3));
     }
+
+    @Test
+    public void generateNums_wrong_input_test() throws Exception {
+        RandomIntGenerator randomIntGenerator = new RandomIntGenerator();
+
+      try{
+          randomIntGenerator.generateNums( 3,4);
+          fail("Can't ask for more numbers than are available");
+      }catch (IllegalArgumentException e) {
+
+      }
+    }
+
+    @Test
+    public void generateNums_right_input_test() throws Exception {
+        RandomIntGenerator randomIntGenerator = new RandomIntGenerator();
+
+        try{
+            randomIntGenerator.generateNums( 3,2);
+        }catch (IllegalArgumentException e) {
+            fail("Can't ask for more numbers than are available");
+        }
+    }
+
+
 }

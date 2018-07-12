@@ -18,7 +18,7 @@ import static tw.core.GameStatus.SUCCESS;
  */
 public class Game {
 
-    private static final int MAX_TIMES = 6;
+    private static final int MAX_TIMES = 6;//6次输入
     private final Answer actualAnswer;
     private final List<GuessResult> guessResults;
     private final String CORRECT_RESULT_STANDAR = "4A0B";
