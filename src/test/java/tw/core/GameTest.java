@@ -4,13 +4,20 @@ package tw.core;/*
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tw.core.exception.OutOfGuessCountException;
 import tw.core.generator.AnswerGenerator;
+import tw.core.generator.RandomIntGenerator;
 import tw.core.model.GuessResult;
+
+import java.util.ArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static tw.core.GameStatus.CONTINUE;
+import static tw.core.GameStatus.FAIL;
 
 public class GameTest {
 
@@ -27,15 +34,75 @@ public class GameTest {
 
     @Test
     public void should_get_the_success_status_when_guess_input_is_correct() throws Exception {
-
         //given
 //        excuteSuccessGuess();
         GuessResult guess = game.guess(Answer.createAnswer("1 2 3 4"));
         //when
         //then
         assertThat(guess.getResult(), is("4A0B"));
-
     }
 
+    @Test
+    public void should_throw_exeption_when_inputcount_7() throws Exception {
+        //given
+//        excuteSuccessGuess();
+        try {
+            GuessResult guess = game.guess(Answer.createAnswer("2 2 3 4"));
+            GuessResult guess1 = game.guess(Answer.createAnswer("2 2 3 4"));
+            GuessResult guess2 = game.guess(Answer.createAnswer("2 2 3 4"));
+            GuessResult guess3 = game.guess(Answer.createAnswer("2 2 3 4"));
+            GuessResult guess4 = game.guess(Answer.createAnswer("2 2 3 4"));
+            GuessResult guess5 = game.guess(Answer.createAnswer("2 2 3 4"));
+        } catch (OutOfGuessCountException e) {
+            fail("Guess count cant over 6!");
+        }
+    }
 
+    @Test
+    public void should_throw_exeption_when_inputcount_small_6() throws Exception {
+        //given
+//        excuteSuccessGuess();
+        try {
+            GuessResult guess = game.guess(Answer.createAnswer("2 2 3 4"));
+            GuessResult guess1 = game.guess(Answer.createAnswer("2 2 3 4"));
+            GuessResult guess2 = game.guess(Answer.createAnswer("2 2 3 4"));
+            GuessResult guess3 = game.guess(Answer.createAnswer("2 2 3 4"));
+            GuessResult guess4 = game.guess(Answer.createAnswer("2 2 3 4"));
+            GuessResult guess5 = game.guess(Answer.createAnswer("2 2 3 4"));
+            GuessResult guess6 = game.guess(Answer.createAnswer("2 2 3 4"));
+            fail("Guess count cant over 6!");
+        } catch (OutOfGuessCountException e) {
+        }
+    }
+
+    @Test
+    public void status_check_return_continue() throws Exception {
+        GuessResult guess = game.guess(Answer.createAnswer("2 2 3 4"));
+        assertThat(game.checkStatus(), is(CONTINUE));
+    }
+    @Test
+    public void status_check_return_fail() throws Exception {
+        GuessResult guess = game.guess(Answer.createAnswer("2 2 3 4"));
+        GuessResult guess1 = game.guess(Answer.createAnswer("2 2 3 4"));
+        GuessResult guess2 = game.guess(Answer.createAnswer("2 2 3 4"));
+        GuessResult guess3 = game.guess(Answer.createAnswer("2 2 3 4"));
+        GuessResult guess4 = game.guess(Answer.createAnswer("2 2 3 4"));
+        GuessResult guess5 = game.guess(Answer.createAnswer("2 2 3 4"));
+        GameStatus status=new GameStatus();
+        assertThat(game.checkStatus(), is(status.FAIL));
+    }
+
+    @Test
+    public void GuessResult_test() throws Exception {
+        GuessResult guess = game.guess(Answer.createAnswer("1 2 3 4"));
+        assertThat(guess.getInputAnswer().toString(), is("1 2 3 4"));
+    }
+
+    @Test
+    public void Game_intital_test() throws Exception {
+        RandomIntGenerator a=new RandomIntGenerator();
+        AnswerGenerator answerGenerator=new AnswerGenerator(a);
+        Game game=new Game(answerGenerator);
+        assertThat(game.guessHistory(), is(new ArrayList()));
+    }
 }
