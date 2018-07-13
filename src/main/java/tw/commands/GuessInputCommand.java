@@ -18,7 +18,7 @@ public class GuessInputCommand implements InputCommand {
         bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    public GuessInputCommand() {
+    public GuessInputCommand() {//输入界面
     }
 
     @Override
